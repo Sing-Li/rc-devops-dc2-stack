@@ -1,0 +1,19 @@
+version: '2'
+services:
+  mongo:
+    image: mongo:3.0
+    command: mongod --smallfiles --oplogSize 128
+
+  rocketchat:
+    image: rocketchat/rocket.chat:$BRANCH
+    environment:
+      - PORT=$INPORT
+      - ROOT_URL=http://docker:$INPORT
+      - MONGO_URL=mongodb://mongo:27017/rc$BRANCH
+    ports:
+      - '${INPORT}'
+
+networks:
+  default:
+    external:
+      name: ingress
